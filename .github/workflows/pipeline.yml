@@ -1,0 +1,39 @@
+name: Run Daily Weather Pipeline
+
+on:
+  # This makes it run every day at 8:00 AM UTC
+  schedule:
+    - cron: '0 8 * * *'
+
+  # This line lets you run it manually from the "Actions" tab
+  workflow_dispatch:
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+    steps:
+      # 1.
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 3.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4.
+      - name: Authenticate to Google Cloud
+        run: |
+          # This creates the credentials.json file from the secret
+          echo "${{ secrets.GCP_CREDENTIALS }}" > credentials.json
+
+      # 5.
+      - name: Run ETL Pipeline Script
+        run: python weather-API.py
