@@ -32,7 +32,7 @@ jobs:
       - name: Authenticate to Google Cloud
         run: |
           # This creates the credentials.json file from the secret
-          echo "${{ secrets.GCP_CREDENTIALS }}" > credentials.json
+          echo '${{ secrets.GCP_CREDENTIALS }}' > credentials.json
 
       # 5.
       - name: Run ETL Pipeline Script
